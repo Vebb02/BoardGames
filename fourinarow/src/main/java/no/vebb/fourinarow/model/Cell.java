@@ -46,4 +46,10 @@ public class Cell {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Cell [color=" + color + ", cellPosition=" + cellPosition + "]";
+    }
+
+
 }

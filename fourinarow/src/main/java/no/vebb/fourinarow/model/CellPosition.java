@@ -42,4 +42,8 @@ public class CellPosition {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "CellPosition [row=" + row + ", column=" + column + "]";
+    }
 }
