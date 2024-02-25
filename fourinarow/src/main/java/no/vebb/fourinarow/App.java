@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import no.vebb.fourinarow.controller.MainController;
 import no.vebb.fourinarow.model.Model;
 import no.vebb.fourinarow.view.MainView;
 
@@ -24,10 +25,13 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         Model model = new Model(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
-        MainView mainView = new MainView(model);
-        scene = new Scene(mainView);
+        MainController controller = new MainController(model);
+        MainView view = new MainView(model, controller);
+        scene = new Scene(view);
         stage.setScene(scene);
         stage.show();
+
+        view.draw();
     }
 
     static void setRoot(String fxml) throws IOException {

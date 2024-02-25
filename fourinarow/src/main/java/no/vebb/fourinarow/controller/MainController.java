@@ -1,7 +1,5 @@
 package no.vebb.fourinarow.controller;
 
-import java.io.IOException;
-
 public class MainController {
     
     private ControllableModel model;
@@ -10,35 +8,35 @@ public class MainController {
         this.model = model;
     }
 
-    private void reset() throws IOException {
+    public void reset() {
         model.reset();
     }
 
-    private void placeZero() throws IOException {
+    public void placeZero() {
         model.placePiece(0);
     }
 
-    private void placeOne() throws IOException {
+    public void placeOne() {
         model.placePiece(1);
     }
 
-    private void placeTwo() throws IOException {
+    public void placeTwo() {
         model.placePiece(2);
     }
 
-    private void placeThree() throws IOException {
+    public void placeThree() {
         model.placePiece(3);
     }
 
-    private void placeFour() throws IOException {
+    public void placeFour() {
         model.placePiece(4);
     }
 
-    private void placeFive() throws IOException {
+    public void placeFive() {
         model.placePiece(5);
     }
 
-    private void placeSix() throws IOException {
+    public void placeSix() {
         model.placePiece(6);
     }
 }
