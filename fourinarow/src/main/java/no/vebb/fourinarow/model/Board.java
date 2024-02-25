@@ -110,7 +110,7 @@ public class Board implements Iterable<Cell> {
         CellPosition topPos = cellPosition;
         while (true) {
             CellPosition tempPos = new CellPosition(topPos.getRow() + i, topPos.getColumn() - 1);
-            if (isValidPosition(cellPosition)) {
+            if (isValidPosition(tempPos)) {
                 topPos = tempPos;
             } else {
                 break;
