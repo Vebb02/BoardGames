@@ -18,15 +18,15 @@ public class App extends Application {
 
     private static Scene scene;
 
-    private static final int NUMBER_OF_ROWS = 6;
-    private static final int NUMBER_OF_COLUMNS = 7;
+    private static final int NUMBER_OF_ROWS = 1;
+    private static final int NUMBER_OF_COLUMNS = 1;
 
     @SuppressWarnings("exports")
     @Override
     public void start(Stage stage) throws IOException {
         Model model = new Model(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
         MainController controller = new MainController(model);
-        MainView view = new MainView(model, controller);
+        MainView view = new MainView(model, controller, NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
         scene = new Scene(view);
         stage.setScene(scene);
         stage.show();

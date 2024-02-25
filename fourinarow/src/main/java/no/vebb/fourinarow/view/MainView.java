@@ -3,11 +3,14 @@ package no.vebb.fourinarow.view;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import no.vebb.fourinarow.controller.MainController;
 import no.vebb.fourinarow.model.Cell;
 import no.vebb.fourinarow.model.CellPosition;
+import no.vebb.fourinarow.model.CellType;
+import no.vebb.fourinarow.model.GameState;
 
 public class MainView extends VBox {
 
@@ -17,62 +20,44 @@ public class MainView extends VBox {
     private ViewableModel model;
 
     private Button resetButton;
+    private Label stateLabel;
 
-    private Button button1;
-    private Button button2;
-    private Button button3;
-    private Button button4;
-    private Button button5;
-    private Button button6;
-    private Button button7;
-
-    private final int NUMBER_OF_ROWS = 6;
-    private final int NUMBER_OF_COLUMNS = 7;
+    private final int NUMBER_OF_ROWS;
+    private final int NUMBER_OF_COLUMNS;
     private int pieceSize = 100;
     private int boardWidth;
     private int boardHeight;
 
-    public MainView(ViewableModel model, MainController controller) {
+    public MainView(ViewableModel model, MainController controller, int rows, int columns) {
+        this.NUMBER_OF_ROWS = rows;
+        this.NUMBER_OF_COLUMNS = columns;
         this.model = model;
         this.boardWidth = pieceSize * NUMBER_OF_COLUMNS;
         this.boardHeight = pieceSize * NUMBER_OF_ROWS;
         this.canvas = new Canvas(boardWidth, boardHeight);
         this.controller = controller;
+        this.stateLabel = new Label();
         initializeButtons();
-        addChildren();
+        this.getChildren().addAll(stateLabel, this.canvas);
     }
 
     private void initializeButtons() {
         this.resetButton = new Button("Reset");
-        this.button1 = new Button("1");
-        this.button2 = new Button("2");
-        this.button3 = new Button("3");
-        this.button4 = new Button("4");
-        this.button5 = new Button("5");
-        this.button6 = new Button("6");
-        this.button7 = new Button("7");
+        this.resetButton.setOnAction(actionEvent -> {
+            controller.reset();
+            draw();
+        });
+        this.getChildren().add(this.resetButton);
 
-        this.resetButton.setOnAction(actionEvent -> { controller.reset(); draw();});
-        this.button1.setOnAction(actionEvent -> { controller.placeZero(); draw();});
-        this.button2.setOnAction(actionEvent -> { controller.placeOne(); draw();});
-        this.button3.setOnAction(actionEvent -> { controller.placeTwo(); draw();});
-        this.button4.setOnAction(actionEvent -> { controller.placeThree(); draw();});
-        this.button5.setOnAction(actionEvent -> { controller.placeFour(); draw();});
-        this.button6.setOnAction(actionEvent -> { controller.placeFive(); draw();});
-        this.button7.setOnAction(actionEvent -> { controller.placeSix(); draw();});
-    }
-
-    private void addChildren() {
-        this.getChildren().addAll(
-                this.resetButton,
-                this.button1,
-                this.button2,
-                this.button3,
-                this.button4,
-                this.button5,
-                this.button6,
-                this.button7,
-                this.canvas);
+        for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
+            Button button = new Button(Integer.toString(i+1));
+            final int column = i;
+            button.setOnAction(actionEvent -> {
+                controller.placePiece(column);
+                draw();
+            });
+            this.getChildren().add(button);
+        }
     }
 
     public void draw() {
@@ -82,6 +67,35 @@ public class MainView extends VBox {
         for (Cell cell : model.getBoardCells()) {
             drawCell(cell, g);
         }
+        updateLabel();
+    }
+
+    private void updateLabel() {
+        GameState gameState = model.getGameState();
+        StringBuilder text = new StringBuilder();
+        switch (gameState) {
+            case IN_GAME:
+                text.append("It's ");
+                if (model.getTurnColor() == CellType.BLUE) {
+                    text.append("blue");
+                } else {
+                    text.append("red");
+                }
+                text.append("'s turn");
+                break;
+            case TIE:
+                text.append("It's a tie");
+                break;
+            case BLUE_WON:
+                text.append("Blue wins");
+                break;
+            case RED_WON:
+                text.append("Red wins");
+                break;
+            default:
+                break;
+        }
+        stateLabel.setText(text.toString());
     }
 
     private void drawCell(Cell cell, GraphicsContext g) {

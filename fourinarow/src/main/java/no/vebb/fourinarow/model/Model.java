@@ -10,8 +10,9 @@ public class Model implements ControllableModel, ViewableModel {
 
     private Board board;
     private CellType turnColor;
+    private CellType startingColor = CellType.RED;
     private GameState gameState;
-    private int numberOfTurns;
+    private int numberOfTurns = 1;
 
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
@@ -24,10 +25,13 @@ public class Model implements ControllableModel, ViewableModel {
 
     @Override
     public void reset() {
-        this.board = new Board(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
-        this.turnColor = CellType.BLUE;
-        this.gameState = GameState.IN_GAME;
-        numberOfTurns = 0;
+        if (numberOfTurns > 0) {
+            this.board = new Board(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
+            changeStartingColor();
+            this.turnColor = startingColor;
+            this.gameState = GameState.IN_GAME;
+            numberOfTurns = 0;
+        }
     }
 
     @Override
@@ -114,6 +118,27 @@ public class Model implements ControllableModel, ViewableModel {
     private void checkFullBoard() {
         if (numberOfTurns == NUMBER_OF_ROWS * NUMBER_OF_COLUMNS) {
             endGame(CellType.EMPTY);
+        }
+    }
+
+    @Override
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    @Override
+    public CellType getTurnColor() {
+        return turnColor;
+    }
+
+    private void changeStartingColor() {
+        if (startingColor == CellType.BLUE) {
+            startingColor = CellType.RED;
+        } else if (startingColor == CellType.RED) {
+            startingColor = CellType.BLUE;
+        } else {
+            throw new RuntimeException(
+                    "Starting color is '" + startingColor + "' which is not a valid starting color.");
         }
     }
 }
