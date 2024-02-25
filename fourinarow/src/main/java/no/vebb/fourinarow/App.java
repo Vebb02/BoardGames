@@ -18,8 +18,8 @@ public class App extends Application {
 
     private static Scene scene;
 
-    private static final int NUMBER_OF_ROWS = 1;
-    private static final int NUMBER_OF_COLUMNS = 1;
+    private static final int NUMBER_OF_ROWS = 6;
+    private static final int NUMBER_OF_COLUMNS = 7;
 
     @SuppressWarnings("exports")
     @Override
