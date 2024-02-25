@@ -5,6 +5,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import no.vebb.fourinarow.model.Model;
+import no.vebb.fourinarow.view.MainView;
 
 import java.io.IOException;
 
@@ -15,10 +17,15 @@ public class App extends Application {
 
     private static Scene scene;
 
+    private static final int NUMBER_OF_ROWS = 6;
+    private static final int NUMBER_OF_COLUMNS = 7;
+
     @SuppressWarnings("exports")
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        Model model = new Model(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
+        MainView mainView = new MainView(model);
+        scene = new Scene(mainView);
         stage.setScene(scene);
         stage.show();
     }

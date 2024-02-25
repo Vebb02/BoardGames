@@ -22,6 +22,7 @@ public class Model implements ControllableModel, ViewableModel {
         reset();
     }
 
+    @Override
     public void reset() {
         this.board = new Board(NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
         this.turnColor = CellType.BLUE;
