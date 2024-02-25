@@ -40,19 +40,19 @@ public class Board implements Iterable<Cell> {
     }
 
     public Cell get(CellPosition cellPos) {
-        legalPositionCheck(cellPos);
+        validPositionCheck(cellPos);
         int index = coordinatesToIndex(cellPos);
         return boardCells.get(index);
     }
 
-    private void legalPositionCheck(CellPosition cellPos) {
-        if (!isLegalPosition(cellPos)) {
+    private void validPositionCheck(CellPosition cellPos) {
+        if (!isValidPosition(cellPos)) {
             throw new IllegalArgumentException("The cell position '" + cellPos + "' is not legal on a board with "
                     + NUMBER_OF_ROWS + " rows and " + NUMBER_OF_COLUMNS + " columns.");
         }
     }
 
-    private boolean isLegalPosition(CellPosition cellPos) {
+    private boolean isValidPosition(CellPosition cellPos) {
         int row = cellPos.getRow();
         int column = cellPos.getColumn();
         boolean isValidRow = row >= 0 && row < NUMBER_OF_ROWS;
@@ -110,14 +110,14 @@ public class Board implements Iterable<Cell> {
         CellPosition topPos = cellPosition;
         while (true) {
             CellPosition tempPos = new CellPosition(topPos.getRow() + i, topPos.getColumn() - 1);
-            if (isLegalPosition(cellPosition)) {
+            if (isValidPosition(cellPosition)) {
                 topPos = tempPos;
             } else {
                 break;
             }
         }
 
-        while (isLegalPosition(topPos)) {
+        while (isValidPosition(topPos)) {
             diagonal.add(get(topPos));
             topPos = new CellPosition(topPos.getRow() - i, topPos.getColumn() + 1);
         }
@@ -135,7 +135,7 @@ public class Board implements Iterable<Cell> {
 
     // Return the four lines from the given position
     public List<List<Cell>> getLinesFromCell(CellPosition cellPosition) {
-        legalPositionCheck(cellPosition);
+        validPositionCheck(cellPosition);
         List<List<Cell>> lines = new ArrayList<>();
         lines.add(getColumn(cellPosition.getColumn()));
         lines.add(getRow(cellPosition.getRow()));
@@ -149,7 +149,7 @@ public class Board implements Iterable<Cell> {
         }
     }
 
-    public boolean placePiece(int column, CellType playerColor) {
+    public CellPosition placePiece(int column, CellType playerColor) {
         playerTypeCheck(playerColor);
 
         if (column < 0 || column >= NUMBER_OF_COLUMNS) {
@@ -157,16 +157,14 @@ public class Board implements Iterable<Cell> {
                     "The column '" + column + "' is not on a board with " + NUMBER_OF_COLUMNS + " columns");
         }
 
-        boolean placedPiece = false;
-
         for (Cell cell : getColumn(column)) {
             if (cell.getColor() == CellType.EMPTY) {
-                set(new Cell(playerColor, cell.getCellPosition()));
-                placedPiece = true;
-                break;
+                CellPosition positionToPlace = cell.getCellPosition();
+                set(new Cell(playerColor, positionToPlace));
+                return positionToPlace;
             }
         }
 
-        return placedPiece;
+        return null;
     }
 }
