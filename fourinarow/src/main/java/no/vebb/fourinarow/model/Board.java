@@ -25,7 +25,7 @@ public class Board implements Iterable<Cell> {
 
         for (int column = 0; column < NUMBER_OF_COLUMNS; column++) {
             for (int row = 0; row < NUMBER_OF_ROWS; row++) {
-                set(new Cell(CellType.EMPTY, new CellPosition(row, column)));
+                boardCells.add(new Cell(CellType.EMPTY, new CellPosition(row, column)));
             }
         }
     }
@@ -47,7 +47,7 @@ public class Board implements Iterable<Cell> {
     }
 
     private void legalPositionCheck(CellPosition cellPos) {
-        if (isLegalPosition(cellPos)) {
+        if (!isLegalPosition(cellPos)) {
             throw new IllegalArgumentException("The cell position '" + cellPos + "' is not legal on a board with "
                     + NUMBER_OF_ROWS + " rows and " + NUMBER_OF_COLUMNS + " columns.");
         }
