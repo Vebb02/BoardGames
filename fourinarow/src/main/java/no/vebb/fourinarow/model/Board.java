@@ -35,12 +35,11 @@ public class Board implements Iterable<Cell> {
     }
 
     private void set(Cell cell) {
-        legalPositionCheck(cell.getCellPosition());
         int index = coordinatesToIndex(cell.getCellPosition());
         boardCells.set(index, cell);
     }
 
-    private Cell get(CellPosition cellPos) {
+    public Cell get(CellPosition cellPos) {
         legalPositionCheck(cellPos);
         int index = coordinatesToIndex(cellPos);
         return boardCells.get(index);
@@ -66,7 +65,7 @@ public class Board implements Iterable<Cell> {
         return boardCells.iterator();
     }
 
-    public List<Cell> getRow(int row) {
+    private List<Cell> getRow(int row) {
         List<Cell> cells = new ArrayList<>();
 
         for (int column = 0; column < NUMBER_OF_COLUMNS; column++) {
@@ -84,7 +83,7 @@ public class Board implements Iterable<Cell> {
         return listOfRows;
     }
 
-    public List<Cell> getColumn(int column) {
+    private List<Cell> getColumn(int column) {
         List<Cell> cells = new ArrayList<>();
 
         for (int row = 0; row < NUMBER_OF_ROWS; row++) {
