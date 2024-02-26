@@ -107,7 +107,7 @@ public class MainView extends VBox {
         g.setFill(Color.WHITE);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         g.setFill(Color.BLACK);
-        g.fillRect(0, pieceSize + margin, this.getWidth(), this.getHeight());
+        g.fillRect(0, pieceSize + 1.5 * margin, this.getWidth(), this.getHeight());
         for (Cell cell : model.getBoardCells()) {
             drawCell(cell, g);
         }

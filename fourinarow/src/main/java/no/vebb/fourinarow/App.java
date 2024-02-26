@@ -1,6 +1,8 @@
 package no.vebb.fourinarow;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -31,13 +33,26 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
         view.draw();
-        stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            view.rescale();
-       });
-       
-       stage.heightProperty().addListener((obs, oldVal, newVal) -> {
-            view.rescale();
-       });
+
+        ChangeListener<Boolean> changeListener = new ChangeListener<>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
+                view.rescale();
+            }
+        };
+
+        ChangeListener<Number> changeListener2 = new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
+                view.rescale();
+            }
+        };
+
+        stage.maximizedProperty().addListener(changeListener);
+        stage.iconifiedProperty().addListener(changeListener);
+
+        stage.widthProperty().addListener(changeListener2);
+        stage.heightProperty().addListener(changeListener2);
     }
 
     static void setRoot(String fxml) throws IOException {
