@@ -25,3 +25,5 @@ replay_pid*
 
 # Target folder
 fourinarow/target
+
+.DS_Store
