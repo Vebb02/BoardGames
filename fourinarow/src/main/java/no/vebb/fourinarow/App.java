@@ -30,8 +30,14 @@ public class App extends Application {
         scene = new Scene(view);
         stage.setScene(scene);
         stage.show();
-
         view.draw();
+        stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            view.rescale();
+       });
+       
+       stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            view.rescale();
+       });
     }
 
     static void setRoot(String fxml) throws IOException {

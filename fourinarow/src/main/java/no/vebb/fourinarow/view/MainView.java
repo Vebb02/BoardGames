@@ -1,9 +1,12 @@
 package no.vebb.fourinarow.view;
 
+import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import no.vebb.fourinarow.controller.MainController;
@@ -14,6 +17,7 @@ import no.vebb.fourinarow.model.GameState;
 
 public class MainView extends VBox {
 
+    private Pane pane;
     private Canvas canvas;
 
     private MainController controller;
@@ -24,46 +28,54 @@ public class MainView extends VBox {
 
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
-    private int pieceSize = 100;
-    private int boardWidth;
-    private int boardHeight;
+    private double pieceSize = 80;
+    private double margin = 10;
+    private double boardWidth;
+    private double boardHeight;
 
     public MainView(ViewableModel model, MainController controller, int rows, int columns) {
         this.NUMBER_OF_ROWS = rows;
         this.NUMBER_OF_COLUMNS = columns;
         this.model = model;
-        this.boardWidth = pieceSize * NUMBER_OF_COLUMNS;
-        this.boardHeight = pieceSize * NUMBER_OF_ROWS;
+        this.boardWidth = (pieceSize + margin) * NUMBER_OF_COLUMNS + margin; // TODO: ikke definer board size to steder
+        this.boardHeight = (pieceSize + margin) * NUMBER_OF_ROWS + margin;
         this.canvas = new Canvas(boardWidth, boardHeight);
+        setBoardSize();
         this.controller = controller;
         this.stateLabel = new Label();
-        initializeButtons();
-        this.getChildren().addAll(stateLabel, this.canvas);
+        initializeResetButton();
+        initializeCanvas();
     }
 
-    private void initializeButtons() {
+    private void initializeCanvas() {
+        this.pane = new Pane();
+        this.getChildren().addAll(stateLabel, pane);
+
+        EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent e) {
+                int x = (int) (e.getSceneX() / boardWidth * NUMBER_OF_COLUMNS);
+                controller.placePiece(x);
+                draw();
+            }
+        };
+        pane.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandler);
+        this.pane.getChildren().add(canvas);
+    }
+
+    private void initializeResetButton() {
         this.resetButton = new Button("Reset");
         this.resetButton.setOnAction(actionEvent -> {
             controller.reset();
             draw();
         });
         this.getChildren().add(this.resetButton);
-
-        for (int i = 0; i < NUMBER_OF_COLUMNS; i++) {
-            Button button = new Button(Integer.toString(i+1));
-            final int column = i;
-            button.setOnAction(actionEvent -> {
-                controller.placePiece(column);
-                draw();
-            });
-            this.getChildren().add(button);
-        }
     }
 
     public void draw() {
         GraphicsContext g = this.canvas.getGraphicsContext2D();
         g.setFill(Color.BLACK);
-        g.fillRect(0, 0, boardWidth, boardHeight);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
         for (Cell cell : model.getBoardCells()) {
             drawCell(cell, g);
         }
@@ -116,9 +128,25 @@ public class MainView extends VBox {
         int row = cellPos.getRow();
         int column = cellPos.getColumn();
 
-        int x = column * pieceSize;
-        int y = (NUMBER_OF_ROWS - row - 1) * pieceSize;
+        double x = column * (pieceSize + margin) + margin;
+        double y = (NUMBER_OF_ROWS - row - 1) * (pieceSize + margin) + margin;
         g.fillOval(x, y, pieceSize, pieceSize);
     }
 
+    public void rescale() {
+        double x = pane.getBoundsInParent().getMinX();
+        double y = pane.getBoundsInParent().getMinY();
+        double width = this.getWidth();
+        double height = this.getHeight();
+        pieceSize = Math.min((width - x) / NUMBER_OF_COLUMNS, (height - y) / NUMBER_OF_ROWS);
+        setBoardSize();
+        draw();
+    }
+
+    private void setBoardSize() {
+        this.boardWidth = (pieceSize + margin) * NUMBER_OF_COLUMNS + margin;
+        this.boardHeight = (pieceSize + margin) * NUMBER_OF_ROWS + margin;
+        this.canvas.setWidth(boardWidth);
+        this.canvas.setHeight(boardHeight);
+    }
 }
