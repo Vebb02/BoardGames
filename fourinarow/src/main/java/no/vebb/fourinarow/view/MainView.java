@@ -1,15 +1,19 @@
 package no.vebb.fourinarow.view;
 
+import java.io.FileInputStream;
+
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
 import no.vebb.fourinarow.controller.MainController;
 import no.vebb.fourinarow.model.Cell;
 import no.vebb.fourinarow.model.CellPosition;
@@ -28,6 +32,9 @@ public class MainView extends VBox {
 
     private Cell previewCell = null;
 
+    private Image blueImage;
+    private Image redImage;
+
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
     private double pieceSize = 80;
@@ -45,6 +52,16 @@ public class MainView extends VBox {
         this.stateLabel = new Label();
         initializeResetButton();
         initializeCanvas();
+        initializeImages();
+    }
+
+    private void initializeImages() {
+        try {
+            blueImage = new Image(new FileInputStream("fourinarow/src/main/resources/no/vebb/fourinarow/Blue.png"));
+            redImage = new Image(new FileInputStream("fourinarow/src/main/resources/no/vebb/fourinarow/Red.png"));
+        } catch (Exception e) {
+
+        }
     }
 
     private void initializeCanvas() {
@@ -96,6 +113,7 @@ public class MainView extends VBox {
         }
         drawCell(previewCell, g);
         updateLabel();
+
     }
 
     private void updateLabel() {
@@ -122,26 +140,27 @@ public class MainView extends VBox {
     private void drawCell(Cell cell, GraphicsContext g) {
         if (cell == null)
             return;
-        switch (cell.getColor()) {
-            case BLUE:
-                g.setFill(Color.BLUE);
-                break;
-            case RED:
-                g.setFill(Color.RED);
-                break;
-            case EMPTY:
-                g.setFill(Color.GREY);
-                break;
-            default:
-                break;
-        }
         CellPosition cellPos = cell.getCellPosition();
         int row = cellPos.getRow();
         int column = cellPos.getColumn();
 
         double x = column * (pieceSize + margin) + margin;
         double y = (NUMBER_OF_ROWS - row) * (pieceSize + margin) + margin;
-        g.fillOval(x, y, pieceSize, pieceSize);
+
+        switch (cell.getColor()) {
+            case BLUE:
+                g.drawImage(blueImage, x, y, pieceSize, pieceSize);
+                break;
+            case RED:
+                g.drawImage(redImage, x, y, pieceSize, pieceSize);
+                break;
+            case EMPTY:
+                g.setFill(Color.GREY);
+                g.fillOval(x, y, pieceSize, pieceSize);
+                break;
+            default:
+                break;
+        }
     }
 
     public void rescale() {
