@@ -70,7 +70,7 @@ public class Model implements ControllableModel, ViewableModel {
     }
 
     private boolean isValidColumn(int column) {
-        return column >= 0 || column < NUMBER_OF_COLUMNS;
+        return column >= 0 && column < NUMBER_OF_COLUMNS;
     }
 
     private boolean isInGame() {
