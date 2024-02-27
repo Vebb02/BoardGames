@@ -1,6 +1,7 @@
 package no.vebb.fourinarow;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
@@ -37,14 +38,18 @@ public class App extends Application {
         ChangeListener<Boolean> changeListener = new ChangeListener<>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> arg0, Boolean arg1, Boolean arg2) {
-                view.rescale();
+                Platform.runLater(() -> {
+                    view.rescale();
+                });
             }
         };
 
         ChangeListener<Number> changeListener2 = new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> arg0, Number arg1, Number arg2) {
-                view.rescale();
+                Platform.runLater(() -> {
+                    view.rescale();
+                });
             }
         };
 
