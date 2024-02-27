@@ -168,15 +168,17 @@ public class MainView extends VBox {
         double y = pane.getBoundsInParent().getMinY();
         double width = this.getWidth();
         double height = this.getHeight();
-        pieceSize = Math.min((width - x) / NUMBER_OF_COLUMNS, (height - y) / NUMBER_OF_ROWS); // TODO: fix scaling
+        pieceSize = Math.min(
+                (width - x - margin) / ((float) NUMBER_OF_COLUMNS) - margin,
+                (height - y - margin) / ((float) NUMBER_OF_ROWS + 1) - margin);
         setBoardSize();
         setCanvasSize();
         draw();
     }
 
     private void setBoardSize() {
-        this.boardWidth = (pieceSize + margin) * NUMBER_OF_COLUMNS + margin;
-        this.boardHeight = (pieceSize + margin) * (NUMBER_OF_ROWS + 1) + margin;
+        this.boardWidth = (pieceSize + margin) * (float) NUMBER_OF_COLUMNS + margin;
+        this.boardHeight = (pieceSize + margin) * (float) (NUMBER_OF_ROWS + 1) + margin;
     }
 
     private void setCanvasSize() {
