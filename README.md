@@ -1,7 +1,11 @@
-# Board Games
+# **Board Games**
+## Finished games
+
+## Games in progress
 * Connect four
 
-
+## Planned games
+* Wordfeud (Scrabble)
 
 ## Credit
-* Chips by Kenney.nl
+* Chips in connect by Kenney.nl
