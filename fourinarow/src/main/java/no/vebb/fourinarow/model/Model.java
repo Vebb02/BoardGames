@@ -56,6 +56,19 @@ public class Model implements ControllableModel, ViewableModel {
         }
     }
 
+    @Override
+    public Cell getShadowPiece(int column) {
+        if (isInGame()) {
+            if (isValidColumn(column)) {
+                CellPosition placedPosition = board.getPlacementPosition(column);
+                if (placedPosition != null) {
+                    return new Cell(turnColor, placedPosition);
+                }
+            }
+        }
+        return null;
+    }
+
     private boolean isValidColumn(int column) {
         return column >= 0 || column < NUMBER_OF_COLUMNS;
     }

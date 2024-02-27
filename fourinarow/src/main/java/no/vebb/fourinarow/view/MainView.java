@@ -1,7 +1,5 @@
 package no.vebb.fourinarow.view;
 
-import java.io.FileInputStream;
-
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
@@ -31,6 +29,8 @@ public class MainView extends VBox {
     private Label stateLabel;
 
     private Cell previewCell = null;
+    private Cell shadowCell = null;
+    private double opacity = 0.5;
 
     private Image blueImage;
     private Image redImage;
@@ -57,10 +57,10 @@ public class MainView extends VBox {
 
     private void initializeImages() {
         try {
-            blueImage = new Image(new FileInputStream("fourinarow/src/main/resources/no/vebb/fourinarow/Blue.png"));
-            redImage = new Image(new FileInputStream("fourinarow/src/main/resources/no/vebb/fourinarow/Red.png"));
+            blueImage = new Image(getClass().getResourceAsStream("/no/vebb/fourinarow/view/Blue.png"));
+            redImage = new Image(getClass().getResourceAsStream("/no/vebb/fourinarow/view/Red.png"));
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -73,24 +73,26 @@ public class MainView extends VBox {
             @Override
             public void handle(MouseEvent e) {
                 EventType<? extends MouseEvent> eventType = e.getEventType();
-                int x = (int) (e.getSceneX() / boardWidth * NUMBER_OF_COLUMNS);
+                int x = (int) ((e.getSceneX() - canvas.getBoundsInParent().getMinX()) / boardWidth * NUMBER_OF_COLUMNS);
                 if (eventType == MouseEvent.MOUSE_CLICKED) {
                     controller.placePiece(x);
                 }
                 if (model.getGameState() == GameState.IN_GAME && eventType != MouseEvent.MOUSE_EXITED) {
                     previewCell = new Cell(model.getTurnColor(), new CellPosition(NUMBER_OF_ROWS, x));
+                    shadowCell = model.getShadowPiece(x);
                 } else {
                     previewCell = null;
+                    shadowCell = null;
                 }
                 draw();
             }
         };
 
-        this.pane.setOnMouseClicked(eventHandler);
-        this.pane.setOnMouseMoved(eventHandler);
-        this.pane.setOnMouseExited(eventHandler);
-        this.pane.setOnMouseEntered(eventHandler);
-        this.pane.setOnMouseDragged(eventHandler);
+        this.canvas.setOnMouseClicked(eventHandler);
+        this.canvas.setOnMouseMoved(eventHandler);
+        this.canvas.setOnMouseExited(eventHandler);
+        this.canvas.setOnMouseEntered(eventHandler);
+        this.canvas.setOnMouseDragged(eventHandler);
     }
 
     private void initializeResetButton() {
@@ -112,6 +114,9 @@ public class MainView extends VBox {
             drawCell(cell, g);
         }
         drawCell(previewCell, g);
+        g.setGlobalAlpha(opacity);
+        drawCell(shadowCell, g);
+        g.setGlobalAlpha(1);
         updateLabel();
 
     }
@@ -155,7 +160,7 @@ public class MainView extends VBox {
                 g.drawImage(redImage, x, y, pieceSize, pieceSize);
                 break;
             case EMPTY:
-                g.setFill(Color.GREY);
+                g.setFill(Color.LIGHTGRAY);
                 g.fillOval(x, y, pieceSize, pieceSize);
                 break;
             default:
@@ -164,7 +169,7 @@ public class MainView extends VBox {
     }
 
     public void rescale() {
-        double x = pane.getBoundsInParent().getMinX();
+        double x = canvas.getBoundsInParent().getMinX();
         double y = pane.getBoundsInParent().getMinY();
         double width = this.getWidth();
         double height = this.getHeight();
@@ -184,5 +189,9 @@ public class MainView extends VBox {
     private void setCanvasSize() {
         this.canvas.setWidth(boardWidth);
         this.canvas.setHeight(boardHeight);
+
+        pane.setPrefSize(canvas.getWidth(), canvas.getHeight());
+        canvas.layoutXProperty().bind(pane.widthProperty().subtract(canvas.getWidth()).divide(2));
+        canvas.layoutYProperty().bind(pane.heightProperty().subtract(canvas.getHeight()).divide(2));
     }
 }

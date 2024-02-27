@@ -14,4 +14,6 @@ public interface ViewableModel {
     
     public CellType getTurnColor();
 
+    public Cell getShadowPiece(int column);
+
 }

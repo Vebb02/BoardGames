@@ -151,16 +151,19 @@ public class Board implements Iterable<Cell> {
 
     public CellPosition placePiece(int column, CellType playerColor) {
         playerTypeCheck(playerColor);
+        CellPosition positionToPlace = getPlacementPosition(column);
+        set(new Cell(playerColor, positionToPlace));
+        return positionToPlace;
+    }
 
+    public CellPosition getPlacementPosition(int column) {
         if (column < 0 || column >= NUMBER_OF_COLUMNS) {
             throw new IllegalArgumentException(
                     "The column '" + column + "' is not on a board with " + NUMBER_OF_COLUMNS + " columns");
         }
-
         for (Cell cell : getColumn(column)) {
             if (cell.getColor() == CellType.EMPTY) {
                 CellPosition positionToPlace = cell.getCellPosition();
-                set(new Cell(playerColor, positionToPlace));
                 return positionToPlace;
             }
         }
