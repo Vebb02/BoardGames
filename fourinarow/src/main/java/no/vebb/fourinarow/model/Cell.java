@@ -1,17 +1,17 @@
 package no.vebb.fourinarow.model;
 
-public class Cell {
+public class Cell<T> {
 
-    private CellType color;
+    private T value;
     private CellPosition cellPosition;
 
-    public Cell(CellType color, CellPosition cellPosition) {
-        this.color = color;
+    public Cell(T value, CellPosition cellPosition) {
+        this.value = value;
         this.cellPosition = cellPosition;
     }
 
-    public CellType getColor() {
-        return color;
+    public T getValue() {
+        return value;
     }
 
     public CellPosition getCellPosition() {
@@ -22,7 +22,7 @@ public class Cell {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((color == null) ? 0 : color.hashCode());
+        result = prime * result + ((value == null) ? 0 : value.hashCode());
         result = prime * result + ((cellPosition == null) ? 0 : cellPosition.hashCode());
         return result;
     }
@@ -35,8 +35,8 @@ public class Cell {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Cell other = (Cell) obj;
-        if (color != other.color)
+        Cell<?> other = (Cell<?>) obj;
+        if (value != other.value)
             return false;
         if (cellPosition == null) {
             if (other.cellPosition != null)
@@ -48,7 +48,7 @@ public class Cell {
 
     @Override
     public String toString() {
-        return "Cell [color=" + color + ", cellPosition=" + cellPosition + "]";
+        return "Cell [color=" + value + ", cellPosition=" + cellPosition + "]";
     }
 
 

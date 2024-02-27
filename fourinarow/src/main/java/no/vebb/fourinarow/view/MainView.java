@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import no.vebb.fourinarow.controller.MainController;
-import no.vebb.fourinarow.model.Cell;
+import no.vebb.fourinarow.model.CFCell;
 import no.vebb.fourinarow.model.CellPosition;
 import no.vebb.fourinarow.model.GameState;
 
@@ -28,8 +28,8 @@ public class MainView extends VBox {
     private Button resetButton;
     private Label stateLabel;
 
-    private Cell previewCell = null;
-    private Cell shadowCell = null;
+    private CFCell previewCell = null;
+    private CFCell shadowCell = null;
     private double opacity = 0.5;
 
     private Image blueImage;
@@ -78,7 +78,7 @@ public class MainView extends VBox {
                     controller.placePiece(x);
                 }
                 if (model.getGameState() == GameState.IN_GAME && eventType != MouseEvent.MOUSE_EXITED) {
-                    previewCell = new Cell(model.getTurnColor(), new CellPosition(NUMBER_OF_ROWS, x));
+                    previewCell = new CFCell(model.getTurnColor(), new CellPosition(NUMBER_OF_ROWS, x));
                     shadowCell = model.getShadowPiece(x);
                 } else {
                     previewCell = null;
@@ -110,7 +110,7 @@ public class MainView extends VBox {
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         g.setFill(Color.BLACK);
         g.fillRect(0, pieceSize + 1.5 * margin, this.getWidth(), this.getHeight());
-        for (Cell cell : model.getBoardCells()) {
+        for (CFCell cell : model.getBoardCells()) {
             drawCell(cell, g);
         }
         drawCell(previewCell, g);
@@ -142,7 +142,7 @@ public class MainView extends VBox {
         stateLabel.setText(text.toString());
     }
 
-    private void drawCell(Cell cell, GraphicsContext g) {
+    private void drawCell(CFCell cell, GraphicsContext g) {
         if (cell == null)
             return;
         CellPosition cellPos = cell.getCellPosition();
@@ -152,7 +152,7 @@ public class MainView extends VBox {
         double x = column * (pieceSize + margin) + margin;
         double y = (NUMBER_OF_ROWS - row) * (pieceSize + margin) + margin;
 
-        switch (cell.getColor()) {
+        switch (cell.getValue()) {
             case BLUE:
                 g.drawImage(blueImage, x, y, pieceSize, pieceSize);
                 break;

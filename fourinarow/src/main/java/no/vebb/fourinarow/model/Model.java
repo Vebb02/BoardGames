@@ -35,8 +35,8 @@ public class Model implements ControllableModel, ViewableModel {
     }
 
     @Override
-    public List<Cell> getBoardCells() {
-        List<Cell> boardCells = new ArrayList<>();
+    public List<CFCell> getBoardCells() {
+        List<CFCell> boardCells = new ArrayList<>();
         board.forEach(boardCells::add);
         return boardCells;
     }
@@ -57,12 +57,12 @@ public class Model implements ControllableModel, ViewableModel {
     }
 
     @Override
-    public Cell getShadowPiece(int column) {
+    public CFCell getShadowPiece(int column) {
         if (isInGame()) {
             if (isValidColumn(column)) {
                 CellPosition placedPosition = board.getPlacementPosition(column);
                 if (placedPosition != null) {
-                    return new Cell(turnColor, placedPosition);
+                    return new CFCell(turnColor, placedPosition);
                 }
             }
         }
@@ -88,13 +88,13 @@ public class Model implements ControllableModel, ViewableModel {
     }
 
     private void evaluatePosition(CellPosition placedPosition) {
-        for (List<Cell> line : board.getLinesFromCell(placedPosition)) {
-            Cell lastCell = null;
+        for (List<CFCell> line : board.getLinesFromCell(placedPosition)) {
+            CFCell lastCell = null;
             int counter = 1;
-            for (Cell cell : line) {
+            for (CFCell cell : line) {
                 if (lastCell != null) {
-                    CellType currentColor = cell.getColor();
-                    boolean hasSamecolor = lastCell.getColor() == currentColor;
+                    CellType currentColor = cell.getValue();
+                    boolean hasSamecolor = lastCell.getValue() == currentColor;
                     if (hasSamecolor) {
                         counter++;
 

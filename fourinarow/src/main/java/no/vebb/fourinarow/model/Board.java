@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Board implements Iterable<Cell> {
+public class Board implements Iterable<CFCell> {
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
 
-    private List<Cell> boardCells;
+    private List<CFCell> boardCells;
 
     public Board(int numberOfRows, int numberOfColumns) {
         if (numberOfRows <= 0 || numberOfColumns <= 0) {
@@ -25,7 +25,7 @@ public class Board implements Iterable<Cell> {
 
         for (int column = 0; column < NUMBER_OF_COLUMNS; column++) {
             for (int row = 0; row < NUMBER_OF_ROWS; row++) {
-                boardCells.add(new Cell(CellType.EMPTY, new CellPosition(row, column)));
+                boardCells.add(new CFCell(CellType.EMPTY, new CellPosition(row, column)));
             }
         }
     }
@@ -34,12 +34,12 @@ public class Board implements Iterable<Cell> {
         return cellPos.getRow() + cellPos.getColumn() * NUMBER_OF_ROWS;
     }
 
-    private void set(Cell cell) {
+    private void set(CFCell cell) {
         int index = coordinatesToIndex(cell.getCellPosition());
         boardCells.set(index, cell);
     }
 
-    public Cell get(CellPosition cellPos) {
+    public CFCell get(CellPosition cellPos) {
         validPositionCheck(cellPos);
         int index = coordinatesToIndex(cellPos);
         return boardCells.get(index);
@@ -61,12 +61,12 @@ public class Board implements Iterable<Cell> {
     }
 
     @Override
-    public Iterator<Cell> iterator() {
+    public Iterator<CFCell> iterator() {
         return boardCells.iterator();
     }
 
-    private List<Cell> getRow(int row) {
-        List<Cell> cells = new ArrayList<>();
+    private List<CFCell> getRow(int row) {
+        List<CFCell> cells = new ArrayList<>();
 
         for (int column = 0; column < NUMBER_OF_COLUMNS; column++) {
             cells.add(get(new CellPosition(row, column)));
@@ -75,16 +75,16 @@ public class Board implements Iterable<Cell> {
         return cells;
     }
 
-    public List<List<Cell>> getAllRows() {
-        List<List<Cell>> listOfRows = new ArrayList<>();
+    public List<List<CFCell>> getAllRows() {
+        List<List<CFCell>> listOfRows = new ArrayList<>();
         for (int row = 0; row < NUMBER_OF_ROWS; row++) {
             listOfRows.add(getRow(row));
         }
         return listOfRows;
     }
 
-    private List<Cell> getColumn(int column) {
-        List<Cell> cells = new ArrayList<>();
+    private List<CFCell> getColumn(int column) {
+        List<CFCell> cells = new ArrayList<>();
 
         for (int row = 0; row < NUMBER_OF_ROWS; row++) {
             cells.add(get(new CellPosition(row, column)));
@@ -93,20 +93,20 @@ public class Board implements Iterable<Cell> {
         return cells;
     }
 
-    public List<List<Cell>> getAllColumns() {
-        List<List<Cell>> listOfColumns = new ArrayList<>();
+    public List<List<CFCell>> getAllColumns() {
+        List<List<CFCell>> listOfColumns = new ArrayList<>();
         for (int column = 0; column < NUMBER_OF_COLUMNS; column++) {
             listOfColumns.add(getColumn(column));
         }
         return listOfColumns;
     }
 
-    private List<Cell> getDiagonal(CellPosition cellPosition, boolean fromTop) {
+    private List<CFCell> getDiagonal(CellPosition cellPosition, boolean fromTop) {
         int i = -1;
         if (fromTop) {
             i = 1;
         }
-        List<Cell> diagonal = new ArrayList<>();
+        List<CFCell> diagonal = new ArrayList<>();
         CellPosition topPos = cellPosition;
         while (true) {
             CellPosition tempPos = new CellPosition(topPos.getRow() + i, topPos.getColumn() - 1);
@@ -126,17 +126,17 @@ public class Board implements Iterable<Cell> {
     }
 
     // Returns the two diagonals from the given position
-    private List<List<Cell>> getDiagonalsFromCell(CellPosition cellPosition) {
-        List<List<Cell>> diagonals = new ArrayList<>();
+    private List<List<CFCell>> getDiagonalsFromCell(CellPosition cellPosition) {
+        List<List<CFCell>> diagonals = new ArrayList<>();
         diagonals.add(getDiagonal(cellPosition, true));
         diagonals.add(getDiagonal(cellPosition, false));
         return diagonals;
     }
 
     // Return the four lines from the given position
-    public List<List<Cell>> getLinesFromCell(CellPosition cellPosition) {
+    public List<List<CFCell>> getLinesFromCell(CellPosition cellPosition) {
         validPositionCheck(cellPosition);
-        List<List<Cell>> lines = new ArrayList<>();
+        List<List<CFCell>> lines = new ArrayList<>();
         lines.add(getColumn(cellPosition.getColumn()));
         lines.add(getRow(cellPosition.getRow()));
         lines.addAll(getDiagonalsFromCell(cellPosition));
@@ -152,7 +152,7 @@ public class Board implements Iterable<Cell> {
     public CellPosition placePiece(int column, CellType playerColor) {
         playerTypeCheck(playerColor);
         CellPosition positionToPlace = getPlacementPosition(column);
-        set(new Cell(playerColor, positionToPlace));
+        set(new CFCell(playerColor, positionToPlace));
         return positionToPlace;
     }
 
@@ -161,8 +161,8 @@ public class Board implements Iterable<Cell> {
             throw new IllegalArgumentException(
                     "The column '" + column + "' is not on a board with " + NUMBER_OF_COLUMNS + " columns");
         }
-        for (Cell cell : getColumn(column)) {
-            if (cell.getColor() == CellType.EMPTY) {
+        for (CFCell cell : getColumn(column)) {
+            if (cell.getValue() == CellType.EMPTY) {
                 CellPosition positionToPlace = cell.getCellPosition();
                 return positionToPlace;
             }
