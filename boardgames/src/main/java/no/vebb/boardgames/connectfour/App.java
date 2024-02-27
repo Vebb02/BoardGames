@@ -22,6 +22,7 @@ public class App extends Application {
 
     private static final int NUMBER_OF_ROWS = 6;
     private static final int NUMBER_OF_COLUMNS = 7;
+    private static final int MIN_SIZE = 300;
 
     @SuppressWarnings("exports")
     @Override
@@ -30,6 +31,8 @@ public class App extends Application {
         MainController controller = new MainController(model);
         MainView view = new MainView(model, controller, NUMBER_OF_ROWS, NUMBER_OF_COLUMNS);
         scene = new Scene(view);
+        stage.setMinHeight(MIN_SIZE);
+        stage.setMinWidth(MIN_SIZE);
         stage.setScene(scene);
         stage.show();
         view.draw();
