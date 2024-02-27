@@ -29,14 +29,14 @@ public class BoardTest {
 
         board = new Board(2, 2);
 
-        List<Cell> expectedBoard = Arrays.asList(
-            new Cell(CellType.EMPTY, new CellPosition(0, 0)),
-            new Cell(CellType.EMPTY, new CellPosition(1, 0)),
-            new Cell(CellType.EMPTY, new CellPosition(0, 1)),
-            new Cell(CellType.EMPTY, new CellPosition(1, 1)));
+        List<CFCell> expectedBoard = Arrays.asList(
+            new CFCell(CellType.EMPTY, new CellPosition(0, 0)),
+            new CFCell(CellType.EMPTY, new CellPosition(1, 0)),
+            new CFCell(CellType.EMPTY, new CellPosition(0, 1)),
+            new CFCell(CellType.EMPTY, new CellPosition(1, 1)));
 
         int sizeCounter = 0;
-        for (Cell cell : board) {
+        for (CFCell cell : board) {
             sizeCounter++;
             assertTrue(expectedBoard.contains(cell));
         }
