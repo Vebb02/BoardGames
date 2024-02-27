@@ -1,5 +1,6 @@
 package no.vebb.fourinarow.view;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
@@ -38,7 +39,7 @@ public class MainView extends VBox {
     private final int NUMBER_OF_ROWS;
     private final int NUMBER_OF_COLUMNS;
     private double pieceSize = 80;
-    private double margin = 10;
+    private double margin;
     private double boardWidth;
     private double boardHeight;
 
@@ -46,13 +47,14 @@ public class MainView extends VBox {
         this.NUMBER_OF_ROWS = rows;
         this.NUMBER_OF_COLUMNS = columns;
         this.model = model;
-        setBoardSize();
-        this.canvas = new Canvas(boardWidth, boardHeight);
         this.controller = controller;
-        this.stateLabel = new Label();
+        setBoardSize();
         initializeResetButton();
         initializeCanvas();
         initializeImages();
+        Platform.runLater(() -> {
+            rescale();
+        });
     }
 
     private void initializeImages() {
@@ -65,6 +67,8 @@ public class MainView extends VBox {
     }
 
     private void initializeCanvas() {
+        this.canvas = new Canvas(boardWidth, boardHeight);
+        this.stateLabel = new Label();
         this.pane = new Pane();
         this.getChildren().addAll(stateLabel, pane);
         this.pane.getChildren().add(canvas);
@@ -169,16 +173,20 @@ public class MainView extends VBox {
     }
 
     public void rescale() {
-        double x = canvas.getBoundsInParent().getMinX();
-        double y = pane.getBoundsInParent().getMinY();
+        double y = getHeightOfMenu();
         double width = this.getWidth();
         double height = this.getHeight();
+        margin = Math.min(width, height) / 100;
         pieceSize = Math.min(
-                (width - x - margin) / ((float) NUMBER_OF_COLUMNS) - margin,
-                (height - y - margin) / ((float) NUMBER_OF_ROWS + 1) - margin);
+                (width - margin) / ((double) NUMBER_OF_COLUMNS) - margin,
+                (height - y - margin) / ((double) NUMBER_OF_ROWS + 1) - margin);
         setBoardSize();
         setCanvasSize();
         draw();
+    }
+
+    private double getHeightOfMenu() {
+        return stateLabel.getHeight() + resetButton.getHeight();
     }
 
     private void setBoardSize() {
