@@ -1,4 +1,5 @@
-# Four in a row (connect four)
+# Board Games
+* Connect four
 
 
 
