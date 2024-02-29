@@ -19,7 +19,7 @@ public class BoardTest {
 
 	@BeforeEach
 	void setUpBeforeEach() {
-
+        
 	}
 
 
