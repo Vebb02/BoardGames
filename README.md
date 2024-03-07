@@ -5,11 +5,7 @@
 * Connect four
 
 ## Planned games
-* Wordfeud (Scrabble)
-* Mexican Train
-* Rummikub
-* Carcassonne
-* Settlers of Catan
+* Scrabble
 * Othello
 * Hearts (Spardame)
 
