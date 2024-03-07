@@ -25,8 +25,6 @@ public class BoardTest {
 
 	@Test
 	void createBoardTest() {
-        illegalBoardExceptionTest();
-
         board = new Board(2, 2);
 
         List<CFCell> expectedBoard = Arrays.asList(
@@ -43,7 +41,8 @@ public class BoardTest {
         assertEquals(expectedBoard.size(), sizeCounter);
 	}
 
-    private void illegalBoardExceptionTest() {
+    @Test
+    void illegalBoardExceptionTest() {
         assertThrows(IllegalArgumentException.class, () -> new Board(0, 0));
         assertThrows(IllegalArgumentException.class, () -> new Board(0, 1));
         assertThrows(IllegalArgumentException.class, () -> new Board(1, 0));
