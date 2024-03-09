@@ -8,6 +8,7 @@
 * Scrabble
 * Othello
 * Hearts (Spardame)
+* Connect-three puzzle
 
 ## Credit
 * Chips in connect by Kenney.nl
