@@ -1,6 +1,8 @@
 package no.vebb.boardgames.cards;
 
-public class Card {
+import java.util.Random;
+
+public class Card implements Comparable<Card> {
 	private final CardRank rank;
 	private final CardSuit suit;
 
@@ -29,6 +31,17 @@ public class Card {
 		return rank.toString().toLowerCase() + " of " + suit.toString().toLowerCase();
 	}
 
+	public static Card getRandom() {
+		Random rnd = new Random();
+		CardRank[] ranks = CardRank.values();
+		int index = rnd.nextInt(ranks.length);
+		CardRank rank = ranks[index];
+		CardSuit[] suits = CardSuit.values();
+		index = rnd.nextInt(suits.length);
+		CardSuit suit = suits[index];
+		return new Card(rank, suit);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,5 +65,10 @@ public class Card {
 		if (suit != other.suit)
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(Card o) {
+		return Integer.compare(getValue(), o.getValue());
 	}
 }

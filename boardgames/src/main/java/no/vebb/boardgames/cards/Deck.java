@@ -1,10 +1,11 @@
 package no.vebb.boardgames.cards;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class Deck {
-	private ArrayList<Card> cards;
+	private List<Card> cards;
 	private Random rnd = new Random();
 
 	public Deck() {
