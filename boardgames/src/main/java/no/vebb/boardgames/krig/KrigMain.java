@@ -3,6 +3,7 @@ package no.vebb.boardgames.krig;
 import no.vebb.boardgames.cards.*;
 
 import java.util.List;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class KrigMain {
@@ -14,17 +15,12 @@ public class KrigMain {
 
 	public void play() {
 		reset();
-		while (move()) {
+		while (playersHasCards()) {
+			doTurn();
+			pause();
+		}
 
-		}
-		System.out.println(player1 + " had " + card1);
-		System.out.println(player2 + " had " + card2);
-		
-		for (Card card : cardsOnTable) {
-			System.out.println(card);
-		}
-		System.out.println(player1.numberOfCards());
-		System.out.println(player2.numberOfCards());
+		giveCards(getPlayerWithCards());
 	}
 
 	private void reset() {
@@ -38,19 +34,56 @@ public class KrigMain {
 		}
 	}
 
-	private boolean draw() {
-		if (!playerHasCards())
+	private boolean doTurn() {
+		if (!draw()) {
+			if (player1.hasCards()) {
+				giveCards(player1);
+			} else {
+				giveCards(player2);
+			}
 			return false;
+		}
+		if (tie()) {
+			krig();
+			return true;
+		}
+		Player turnWinner = getWinningPlayer();
+		if (turnWinner == null) {
+			return false;
+		}
+		giveCards(turnWinner);
+		return true;
+	}
+
+	private void printStatus() {
+		System.out.println(player1 + " used " + card1);
+		System.out.println(player2 + " used " + card2);
+		System.out.println(player1.numberOfCards());
+		System.out.println(player2.numberOfCards());
+	}
+
+	private void pause() {
+		try {
+			System.in.read();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private boolean draw() {
+		if (!playersHasCards())
+		return false;
 		card1 = player1.useCard();
 		cardsOnTable.add(card1);
 		card2 = player2.useCard();
 		cardsOnTable.add(card2);
-		System.out.println(player1 + " used " + card1);
-		System.out.println(player2 + " used " + card2);
+		printStatus();
 		return true;
 	}
 
-	private void drawThree() {
+	private void krig() {
+		System.out.println("Krig on:");
+		printStatus();
 		for (int i = 0; i < 3; i++) {
 			Card card1 = player1.useCard();
 			if (card1 != null) {
@@ -65,33 +98,22 @@ public class KrigMain {
 		}
 	}
 
-	private boolean move() {
-		System.out.println(player1.numberOfCards());
-		System.out.println(player2.numberOfCards());
-		if (!draw()) {
-			if (player1.hasCards()) {
-				giveCards(player1);
-			} else {
-				giveCards(player2);
-			}
-			return false;
-		}
-		if (tie()) {
-			drawThree();
-			return true;
-		}
-		int comp = card1.compareTo(card2);
-		if (comp == 1) {
-			giveCards(player1);
-		} else if (comp == -1) {
-			giveCards(player2);
-		} else {
-			return false;
-		}
-		return true;
+	private Player getPlayerWithCards() {
+		return player1.hasCards() ? player1 : player2;
 	}
 
-	private boolean playerHasCards() {
+	private Player getWinningPlayer() {
+		int comp = card1.compareTo(card2);
+		if (comp == 1) {
+			return player1;
+		}
+		if (comp == -1) {
+			return player2;
+		}
+		return null;
+	}
+
+	private boolean playersHasCards() {
 		return player1.hasCards() && player2.hasCards();
 	}
 
