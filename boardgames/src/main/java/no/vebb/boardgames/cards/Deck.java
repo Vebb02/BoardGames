@@ -15,10 +15,22 @@ public class Deck {
 
 	public void reset() {
 		cards = new ArrayList<>();
+		addCards();
+		scrambleCards();
+	}
+
+	private void addCards() {
 		for (CardSuit suit : CardSuit.values()) {
 			for (CardRank rank : CardRank.values()) {
 				cards.add(new Card(rank, suit));
 			}
+		}
+	}
+
+	private void scrambleCards() {
+		for (int i = cardsLeft() - 1; i > 0; i--) {
+			int j = rnd.nextInt(i + 1);
+			Collections.swap(cards, i, j);
 		}
 	}
 
@@ -30,9 +42,6 @@ public class Deck {
 		if (cardsLeft() == 0) {
 			return null;
 		}
-		int i = rnd.nextInt(cardsLeft());
-		int last = cardsLeft() - 1;
-		Collections.swap(cards, i, last);
-		return cards.removeLast();
+		return cards.remove(cardsLeft() - 1);
 	}
 }
