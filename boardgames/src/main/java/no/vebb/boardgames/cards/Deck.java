@@ -1,6 +1,7 @@
 package no.vebb.boardgames.cards;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -30,6 +31,8 @@ public class Deck {
 			return null;
 		}
 		int i = rnd.nextInt(cardsLeft());
-		return cards.remove(i);
+		int last = cardsLeft() - 1;
+		Collections.swap(cards, i, last);
+		return cards.removeLast();
 	}
 }
