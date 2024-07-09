@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class KrigMain {
-	private Player player1;
+	private KrigPlayer player1;
 	private Card card1;
-	private Player player2;
+	private KrigPlayer player2;
 	private Card card2;
 	private List<Card> cardsOnTable;
 
@@ -24,8 +24,8 @@ public class KrigMain {
 	}
 
 	private void reset() {
-		player1 = new Player("Player 1");
-		player2 = new Player("Player 2");
+		player1 = new KrigPlayer("Player 1");
+		player2 = new KrigPlayer("Player 2");
 		cardsOnTable = new ArrayList<>();
 		Deck deck = new Deck();
 		while (deck.cardsLeft() > 0) {
@@ -47,7 +47,7 @@ public class KrigMain {
 			krig();
 			return true;
 		}
-		Player turnWinner = getWinningPlayer();
+		KrigPlayer turnWinner = getWinningPlayer();
 		if (turnWinner == null) {
 			return false;
 		}
@@ -98,11 +98,11 @@ public class KrigMain {
 		}
 	}
 
-	private Player getPlayerWithCards() {
+	private KrigPlayer getPlayerWithCards() {
 		return player1.hasCards() ? player1 : player2;
 	}
 
-	private Player getWinningPlayer() {
+	private KrigPlayer getWinningPlayer() {
 		int comp = card1.compareTo(card2);
 		if (comp == 1) {
 			return player1;
@@ -121,7 +121,7 @@ public class KrigMain {
 		return card1.compareTo(card2) == 0;
 	}
 
-	private void giveCards(Player player) {
+	private void giveCards(KrigPlayer player) {
 		for (Card card : cardsOnTable) {
 			player.addCard(card);
 			System.out.println(player + " got " + card);

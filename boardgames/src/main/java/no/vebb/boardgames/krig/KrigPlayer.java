@@ -5,11 +5,11 @@ import no.vebb.boardgames.cards.*;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class Player {
+public class KrigPlayer {
 	private Queue<Card> cards = new LinkedList<>();
 	private String name;
 
-	public Player(String name) {
+	public KrigPlayer(String name) {
 		this.name = name;
 	}
 
