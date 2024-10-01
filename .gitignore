@@ -24,6 +24,6 @@ hs_err_pid*
 replay_pid*
 
 # Target folder
-fourinarow/target
+target
 
 .DS_Store
